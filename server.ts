@@ -2,8 +2,12 @@ import { createServer as createViteServer } from 'vite'
 import Koa from 'koa'
 import koaConnect from 'koa-connect'
 import * as fs from 'fs'
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const nodeEnv = process.env.NODE_ENV
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 async function createDevServer() {
 
