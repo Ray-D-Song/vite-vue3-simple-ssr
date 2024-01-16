@@ -10,8 +10,8 @@ function handleClick() {
 
 <template>
   <div>
-    <div>{{ num }}</div>
-    <button @click="handleClick">click</button>
+    <div class="text-xl">{{ num }}</div>
+    <button @click="handleClick" class="rounded-sm border border-black">click</button>
     <RouterView />
   </div>
 </template>

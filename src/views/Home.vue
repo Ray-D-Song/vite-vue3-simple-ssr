@@ -5,5 +5,5 @@ const title = ref('Home')
 </script>
 
 <template>
-  <h1>{{ title }}</h1>
+  <h1 class="text-blue">{{ title }}</h1>
 </template>
