@@ -4,9 +4,11 @@
   "description": "simple ssr starter",
   "type": "module",
   "scripts": {
-    "dev": "npx tsx server.ts",
+    "dev": "NODE_ENV=development npx tsx server.ts",
     "preview": "",
-    "build": ""
+    "build:client": "vite build --ssrManifest",
+    "build:server": "tsc --project ./tsconfig.server.json && vite build --ssr src/serverEntry.ts --outDir dist/server",
+    "build": "tsc --project ./tsconfig.server.json && npm run build:client && npm run build:server"
   },
   "keywords": [
     "vue3",
@@ -22,6 +24,7 @@
     "koa": "^2.15.0",
     "koa-connect": "^2.1.0",
     "pinia": "^2.1.7",
+    "pino": "^8.17.2",
     "vue": "^3.3.11",
     "vue-router": "^4.2.5"
   },

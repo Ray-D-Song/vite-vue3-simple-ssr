@@ -1,0 +1,11 @@
+{
+  "files": ["./server.ts"],
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "target": "ESNext",
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext",
+    "outDir": "./dist"
+  }
+}
