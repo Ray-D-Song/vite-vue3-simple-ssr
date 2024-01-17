@@ -9,6 +9,9 @@
   </head>
   <body>
     <div id="app"><!-- ssr --></div>
-   <script type="module" src="/src/clientEntry.ts"></script>
+    <script type="module" src="/src/clientEntry.ts"></script>
+    <script>
+      window.__PINIA__ = '<!-- store -->'
+    </script>
   </body>
 </html>

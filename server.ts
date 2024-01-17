@@ -33,7 +33,7 @@ async function createDevServer() {
       template = await vite.transformIndexHtml(url, template)
 
       const render = (await vite.ssrLoadModule('/src/serverEntry.ts')).serverRender
-      const { html: appHtml, storeState } = await render(url)
+      const { html: appHtml } = await render(url)
 
       const html = template
         .replace('<!-- ssr -->', appHtml)
@@ -56,7 +56,9 @@ async function createProdServer() {
 
   const server = new Koa()
   
-  server.use(koaStatic(`${__dirname}/client`))
+  server.use(koaStatic(`${__dirname}/client`, {
+    index: false
+  }))
 
   server.use(async ({request, response}) => {
     const url = request.url
@@ -69,10 +71,11 @@ async function createProdServer() {
       const render = (await import(`${__dirname}/server/serverEntry.js`)).serverRender
       const manifest = JSON.parse(fs.readFileSync(`${__dirname}/client/.vite/ssr-manifest.json`, 'utf-8'))
       const { html: appHtml, storeState, preload } = await render(url, manifest)
-
+      
       const html = template
-        .replace(`<!-- ssr -->`, appHtml.html)
+        .replace(`<!-- ssr -->`, appHtml)
         .replace('<!-- preload -->', preload)
+        .replace(`'<!-- store -->'`, JSON.stringify(storeState))
 
       response.status = 200
       response.set('Content-Type', 'text/html')
