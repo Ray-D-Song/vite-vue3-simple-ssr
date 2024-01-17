@@ -8,10 +8,10 @@ I don't like Nuxt3, it's too heavy. So I create a simple starter myself.
 * UnoCSS
 
 ## route map:
-- [*] UnoCSS
-- [*] Vue Router
-- [*] Pinia
-- [] Pino log
-- [] SSG
-- [] multi render choice
-- [] island render
+- [x] UnoCSS
+- [x] Vue Router
+- [x] Pinia
+- [ ] Pino log
+- [ ] SSG
+- [ ] multi render choice
+- [ ] island render
