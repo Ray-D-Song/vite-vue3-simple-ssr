@@ -5,11 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "NODE_ENV=development npx tsx server.ts",
-    "preview": "",
     "build:client": "vite build --ssrManifest",
     "build:server": "npx swc ./server.ts -o ./dist/index.mjs && vite build --ssr src/serverEntry.ts --outDir dist/server",
-    "build": "npm run build:client && npm run build:server"
-  },
+    "build": "npm run build:client && npm run build:server",
+		"preview": "npm run build && NODE_ENV=production SERVER_PORT=9292 node ./dist/index.mjs"
+	},
   "keywords": [
     "vue3",
     "koa",

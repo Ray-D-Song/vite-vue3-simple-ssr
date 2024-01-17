@@ -1,25 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { RouterView, useRouter } from 'vue-router'
-
-const num = ref(0)
-function handleClick() {
-  num.value++
-}
-
-const router = useRouter()
-function handleGoAbout() {
-  router.push({
-    name: 'about'
-  })
-}
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <div>
-    <div class="text-xl">{{ num }}</div>
-    <button @click="handleClick" class="rounded-sm border border-black">click</button>
-    <button @click="handleGoAbout">Go About</button>
+  <div class="w-full min-h-screen flex flex-col justify-center items-center">
+		<h1 class="text-4xl text-green-800 font-700">Simple Vite Vue3 SSR</h1>
     <RouterView />
   </div>
 </template>

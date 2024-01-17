@@ -98,11 +98,9 @@ if (nodeEnv === 'development') {
     .then(s => s.listen(80))
     .then(() => { console.log('dev server: http://127.0.0.1:80') })
     .catch(e => { console.log(e) })
-}
-
-if (nodeEnv === 'production') {
+} else {
   createProdServer()
-    .then(s => s.listen(process.env.PORT))
-    .then(() => { console.log('prod server start') })
+    .then(s => s.listen(process.env.SERVER_PORT))
+    .then(() => { console.log('prod server start, ', `port: ${process.env.SERVER_PORT}`) })
     .catch(e => { console.log(e) })
 }

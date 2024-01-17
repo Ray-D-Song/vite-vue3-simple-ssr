@@ -8,11 +8,6 @@ export default function (): Router {
         path: '/',
         name: 'home',
         component: async () => await import('@/views/Home.vue')
-      },
-      {
-        path: '/about',
-        name: 'about',
-        component: async () => await import('@/views/About')
       }
     ]
   })
