@@ -7,7 +7,7 @@
     "dev": "NODE_ENV=development npx tsx server.ts",
     "preview": "",
     "build:client": "vite build --ssrManifest",
-    "build:server": "npx swc ./server.ts -o ./dist/server.mjs && vite build --ssr src/serverEntry.ts --outDir dist/server",
+    "build:server": "npx swc ./server.ts -o ./dist/index.mjs && vite build --ssr src/serverEntry.ts --outDir dist/server",
     "build": "npm run build:client && npm run build:server"
   },
   "keywords": [
@@ -20,9 +20,11 @@
   "license": "ISC",
   "dependencies": {
     "@types/koa": "^2.14.0",
+    "@types/koa-static": "^4.0.4",
     "@unocss/reset": "^0.58.3",
     "koa": "^2.15.0",
     "koa-connect": "^2.1.0",
+    "koa-static": "^5.0.0",
     "pinia": "^2.1.7",
     "pino": "^8.17.2",
     "vue": "^3.3.11",

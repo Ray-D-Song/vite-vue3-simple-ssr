@@ -1,9 +1,10 @@
 import { createServer as createViteServer } from 'vite'
 import Koa from 'koa'
 import koaConnect from 'koa-connect'
-import * as fs from 'fs'
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import koaStatic from 'koa-static'
 
 const nodeEnv = process.env.NODE_ENV
 const __filename = fileURLToPath(import.meta.url);
@@ -32,9 +33,10 @@ async function createDevServer() {
       template = await vite.transformIndexHtml(url, template)
 
       const render = (await vite.ssrLoadModule('/src/serverEntry.ts')).serverRender
-      const appHtml = await render(url)
+      const { html: appHtml, storeState } = await render(url)
 
-      const html = template.replace(`<!-- ssr -->`, appHtml.html)
+      const html = template
+        .replace('<!-- ssr -->', appHtml)
 
       response.status = 200
       response.set('Content-Type', 'text/html')
@@ -54,6 +56,8 @@ async function createProdServer() {
 
   const server = new Koa()
   
+  server.use(koaStatic(`${__dirname}/client`))
+
   server.use(async ({request, response}) => {
     const url = request.url
     try {
@@ -63,9 +67,12 @@ async function createProdServer() {
       )
 
       const render = (await import(`${__dirname}/server/serverEntry.js`)).serverRender
-      const appHtml = await render(url)??{ html: '' }
+      const manifest = JSON.parse(fs.readFileSync(`${__dirname}/client/.vite/ssr-manifest.json`, 'utf-8'))
+      const { html: appHtml, storeState, preload } = await render(url, manifest)
 
-      const html = template.replace(`<!-- ssr -->`, appHtml.html)
+      const html = template
+        .replace(`<!-- ssr -->`, appHtml.html)
+        .replace('<!-- preload -->', preload)
 
       response.status = 200
       response.set('Content-Type', 'text/html')

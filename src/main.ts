@@ -1,4 +1,4 @@
-import { createSSRApp, h } from 'vue'
+import { createSSRApp } from 'vue'
 import { createPinia } from 'pinia'
 import createRouter from '@/router/index'
 import 'virtual:uno.css'
