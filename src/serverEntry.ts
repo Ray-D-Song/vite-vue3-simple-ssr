@@ -1,7 +1,7 @@
 import createVueInstance from './main'
 import { renderToString } from 'vue/server-renderer'
 
-function path2ToLnk(filePath: string) {
+function path2ToLnk (filePath: string): string {
   if (filePath.endsWith('.js')) {
     return `<link rel="modulepreload" crossorigin href="${filePath}">`
   } else if (filePath.endsWith('.css')) {
@@ -17,6 +17,7 @@ function path2ToLnk(filePath: string) {
   } else if (filePath.endsWith('.png')) {
     return ` <link rel="preload" href="${filePath}" as="image" type="image/png">`
   }
+  return ''
 }
 
 interface SSRCtx {
@@ -24,10 +25,10 @@ interface SSRCtx {
 }
 type Manifest = Record<string, string[]>
 
-function renderPreload(manifest: Manifest, { modules }: SSRCtx) {
+function renderPreload (manifest: Manifest, { modules }: SSRCtx): string {
   let links = ''
   modules.forEach(key => {
-    const filePathArr = manifest[key]??[]
+    const filePathArr = manifest[key] ?? []
     filePathArr.forEach(filePath => {
       links += path2ToLnk(filePath)
     })
@@ -36,7 +37,11 @@ function renderPreload(manifest: Manifest, { modules }: SSRCtx) {
   return links
 }
 
-async function serverRender(url: string, mainfest?: Manifest) {
+async function serverRender (url: string, mainfest?: Manifest): Promise<{
+  html: string
+  storeState: string
+  preload: string
+} | undefined> {
   const { app, store, router } = createVueInstance()
 
   try {
@@ -47,7 +52,7 @@ async function serverRender(url: string, mainfest?: Manifest) {
     const ctx = {}
     // @vitejs/plugin-vue will auto inject context
     const html = await renderToString(app, ctx)
-    const preload = renderPreload(mainfest??{}, ctx as SSRCtx)
+    const preload = renderPreload(mainfest ?? {}, ctx as SSRCtx)
     const storeState = JSON.stringify(store.state.value)
 
     return { html, storeState, preload }

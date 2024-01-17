@@ -1,18 +1,18 @@
-import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
+import { createMemoryHistory, createRouter, createWebHistory, type Router } from 'vue-router'
 
-export default function () {
+export default function (): Router {
   return createRouter({
-    history: import.meta.env.SSR === false ? createWebHistory(import.meta.env.BASE_URL) : createMemoryHistory(),
+    history: !import.meta.env.SSR ? createWebHistory(import.meta.env.BASE_URL) : createMemoryHistory(),
     routes: [
       {
         path: '/',
         name: 'home',
-        component: () => import('@/views/Home.vue')
+        component: async () => await import('@/views/Home.vue')
       },
       {
         path: '/about',
         name: 'about',
-        component: () => import('@/views/About')
+        component: async () => await import('@/views/About')
       }
     ]
   })

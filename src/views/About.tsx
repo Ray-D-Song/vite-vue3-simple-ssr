@@ -2,10 +2,9 @@ import { defineComponent } from 'vue'
 import useUserStore from '@/store/index'
 
 export default defineComponent(() => {
-
   const userStore = useUserStore()
 
-  function handleUpdateUserName() {
+  function handleUpdateUserName (): void {
     userStore.updateUserName('Jenny', 'Hu')
   }
 

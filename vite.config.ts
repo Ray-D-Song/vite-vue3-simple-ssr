@@ -9,7 +9,7 @@ export default defineConfig({
   plugins: [
     UnoCSS(),
     vue(),
-    vueJsx(),
+    vueJsx()
   ],
   resolve: {
     alias: {

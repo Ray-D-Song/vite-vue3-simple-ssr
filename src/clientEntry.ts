@@ -2,7 +2,7 @@ import createVueInstance from './main'
 
 const { app, store, router } = createVueInstance()
 
-if(window.__PINIA__&&(!import.meta.env.DEV)) {
+if (window.__PINIA__ && (!import.meta.env.DEV)) {
   store.state.value = JSON.parse(window.__PINIA__)
 }
 

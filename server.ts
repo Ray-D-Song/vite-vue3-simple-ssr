@@ -1,4 +1,4 @@
-import { createServer as createViteServer } from 'vite'
+import { createServer as createViteServer, type Manifest } from 'vite'
 import Koa from 'koa'
 import koaConnect from 'koa-connect'
 import fs from 'fs'
@@ -7,11 +7,15 @@ import { fileURLToPath } from 'url'
 import koaStatic from 'koa-static'
 
 const nodeEnv = process.env.NODE_ENV
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const __filename = fileURLToPath(import.meta.url)
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const __dirname = path.dirname(__filename)
 
-async function createDevServer() {
+type Render = (url: string, manifest?: Manifest) => Promise<{ html: string, storeState: string, preload: string }>
+type Server = Koa<Koa.DefaultState, Koa.DefaultContext>
 
+async function createDevServer (): Promise<Server> {
   const vite = await createViteServer({
     server: { middlewareMode: true },
     appType: 'custom'
@@ -23,16 +27,16 @@ async function createDevServer() {
     vite.middlewares.handle(req, res, next)
   }))
 
-  server.use(async ({request, response}) => {
+  server.use(async ({ request, response }) => {
     const url = request.url
     try {
       let template = fs.readFileSync(
         'index.html',
-        'utf-8',
+        'utf-8'
       )
       template = await vite.transformIndexHtml(url, template)
 
-      const render = (await vite.ssrLoadModule('/src/serverEntry.ts')).serverRender
+      const render: Render = (await vite.ssrLoadModule('/src/serverEntry.ts')).serverRender
       const { html: appHtml } = await render(url)
 
       const html = template
@@ -52,30 +56,29 @@ async function createDevServer() {
   return server
 }
 
-async function createProdServer() {
-
+async function createProdServer (): Promise<Server> {
   const server = new Koa()
-  
+
   server.use(koaStatic(`${__dirname}/client`, {
     index: false
   }))
 
-  server.use(async ({request, response}) => {
+  server.use(async ({ request, response }) => {
     const url = request.url
     try {
-      let template = fs.readFileSync(
+      const template = fs.readFileSync(
         `${__dirname}/client/index.html`,
-        'utf-8',
+        'utf-8'
       )
 
-      const render = (await import(`${__dirname}/server/serverEntry.js`)).serverRender
-      const manifest = JSON.parse(fs.readFileSync(`${__dirname}/client/.vite/ssr-manifest.json`, 'utf-8'))
+      const render: Render = (await import(`${__dirname}/server/serverEntry.js`)).serverRender
+      const manifest: Manifest = JSON.parse(fs.readFileSync(`${__dirname}/client/.vite/ssr-manifest.json`, 'utf-8'))
       const { html: appHtml, storeState, preload } = await render(url, manifest)
-      
+
       const html = template
-        .replace(`<!-- ssr -->`, appHtml)
+        .replace('<!-- ssr -->', appHtml)
         .replace('<!-- preload -->', preload)
-        .replace(`'<!-- store -->'`, JSON.stringify(storeState))
+        .replace('\'<!-- store -->\'', JSON.stringify(storeState))
 
       response.status = 200
       response.set('Content-Type', 'text/html')
@@ -85,21 +88,21 @@ async function createProdServer() {
       response.status = 500
       response.body = e.stack
     }
-  }) 
+  })
 
   return server
 }
 
-if(nodeEnv === 'development') {
+if (nodeEnv === 'development') {
   createDevServer()
     .then(s => s.listen(80))
-    .then(() => console.log('dev server: http://127.0.0.1:80'))
+    .then(() => { console.log('dev server: http://127.0.0.1:80') })
+    .catch(e => { console.log(e) })
 }
 
-if(nodeEnv === 'production') {
+if (nodeEnv === 'production') {
   createProdServer()
     .then(s => s.listen(process.env.PORT))
-    .then(() => {
-      console.log('prod server start')
-    })
+    .then(() => { console.log('prod server start') })
+    .catch(e => { console.log(e) })
 }

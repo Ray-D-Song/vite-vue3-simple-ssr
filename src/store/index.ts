@@ -9,7 +9,7 @@ const useUserStore = defineStore('user', {
     getFullName: (state) => (state.firstName + '-D-' + state.lastName)
   },
   actions: {
-    updateUserName(newFirstName: string, newLastName: string) {
+    updateUserName (newFirstName: string, newLastName: string) {
       this.firstName = newFirstName
       this.lastName = newLastName
     }
