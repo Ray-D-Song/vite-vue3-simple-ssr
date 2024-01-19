@@ -83,10 +83,10 @@ async function createProdServer (): Promise<Server> {
       response.status = 200
       response.set('Content-Type', 'text/html')
       response.body = html
-    } catch (e: any) {
+    } catch (e) {
       console.log(e)
       response.status = 500
-      response.body = e.stack
+      response.body = (e as Error).stack
     }
   })
 

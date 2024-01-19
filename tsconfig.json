@@ -1,6 +1,6 @@
 {
-  "include": ["global.d.ts", "src/**/*", "src/**/*.vue", "/**/*.ts"],
-  "exclude": ["src/**/__tests__/*"],
+  "include": ["src", "*.ts"],
+  "exclude": ["src/**/__tests__/*", "node_modules"],
   "compilerOptions": {
     "lib": [
       "ES2020",
@@ -23,6 +23,7 @@
     "types": ["node", "jsdom"],
     "baseUrl": ".",
     "outDir": "./dist",
+		"noImplicitAny": false,
     "paths": {
       "@/*": ["./src/*"]
     },
