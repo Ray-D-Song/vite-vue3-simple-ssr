@@ -3,6 +3,7 @@ import { setupServer } from 'msw/node'
 import { type HttpHandler, HttpResponse, http } from 'msw'
 
 const prefix = 'https://test.mock'
+let num = 0
 
 export const handlers: HttpHandler[] = [
 	http.get(`${prefix}/useFetch/default`, () => {
@@ -14,7 +15,14 @@ export const handlers: HttpHandler[] = [
 	http.post(`${prefix}/useFetch/hooks`, async (ctx) => {
 		return HttpResponse.json({
 			msg: 'hey',
-			reqBody: (await ctx.request.json()).name,
+			reqBody: (await ctx.request.json())?.name,
+		})
+	}),
+
+	http.get(`${prefix}/useFetch/value`, async (ctx) => {
+		num++
+		return HttpResponse.json({
+			num,
 		})
 	}),
 ]

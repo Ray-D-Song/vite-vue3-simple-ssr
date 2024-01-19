@@ -1,5 +1,7 @@
 import type { Ref } from 'vue'
 
+export type DataType = 'text' | 'json' | 'blob' | 'arrayBuffer' | 'formData'
+
 /**
  * useFetch param type
  */
@@ -10,38 +12,27 @@ export interface UseFetchConfig {
 
 export type NativeFetchOptions = RequestInit
 
-export type BeforeFetchContext = NativeFetchOptions
-
-export interface AfterFetchContext {
-	response: Response
-}
-
-export interface OnFetchErrorContext<T = any, E = any> {
-	error: E
-
-	data: T | null
-}
-
-export interface UseFetchHooks {
+export interface UseFetchHooks<T = any> {
 
 	/**
 	 * Will run immediately before the fetch request is dispatched
 	 * return value will be merged into config
 	 */
-	beforeFetch?: (ctx?: BeforeFetchContext) => Promise<Partial<BeforeFetchContext> | void> | Partial<BeforeFetchContext> | void
+	beforeFetch?: (options: NativeFetchOptions) => Partial<NativeFetchOptions> | Promise<Partial<NativeFetchOptions>> | void
 
 	/**
 	 * Will run immediately after the fetch request is returned.
 	 * Runs after any 2xx response
+	 * ctx = raw data
 	 * return value will replace data
 	 */
-	afterFetch?: (ctx?: AfterFetchContext) => Promise<Partial<AfterFetchContext>> | Partial<AfterFetchContext> | void
+	afterFetch?: (data?: T) => Partial<T> | Promise<Partial<T>> | void
 
 	/**
 	 * Will run immediately after the fetch request is returned.
 	 * Runs after any 4xx and 5xx response
 	 */
-	onFetchError?: (ctx?: OnFetchErrorContext) => Promise<Partial<OnFetchErrorContext>> | Partial<OnFetchErrorContext> | void
+	onFetchError?: (err?: any) => void | Promise<void>
 }
 
 /** useFetch return type */

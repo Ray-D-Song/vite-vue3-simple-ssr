@@ -5,9 +5,7 @@
 import type { Ref } from 'vue'
 import { ref, shallowRef } from 'vue'
 import { until } from '@/utils/util'
-import type { NativeFetchOptions, UseFetchConfig, UseFetchReturn } from '@/utils/useFetch/params.type'
-
-type DataType = 'text' | 'json' | 'blob' | 'arrayBuffer' | 'formData'
+import type { DataType, NativeFetchOptions, UseFetchConfig, UseFetchReturn } from '@/utils/useFetch/index.type'
 
 function useFetch<T>(url: string, config?: UseFetchConfig): UseFetchReturn<T> & PromiseLike<UseFetchReturn<T>> {
 	/** return value */
@@ -37,7 +35,7 @@ function useFetch<T>(url: string, config?: UseFetchConfig): UseFetchReturn<T> & 
 		let responseData: any
 
 		if (config?.hooks?.beforeFetch)
-			Object.assign(fetchOptions, (await config.hooks.beforeFetch()) ?? {})
+			Object.assign(fetchOptions, (await config.hooks.beforeFetch(fetchOptions)) ?? {})
 
 		await fetch(url, fetchOptions)
 			.then(async (fetchResponse) => {
@@ -51,11 +49,8 @@ function useFetch<T>(url: string, config?: UseFetchConfig): UseFetchReturn<T> & 
 					throw new Error(fetchResponse.statusText)
 				}
 
-				if (config?.hooks?.afterFetch) {
-					responseData = (await config.hooks.afterFetch({
-						response: fetchResponse,
-					})) ?? responseData
-				}
+				if (config?.hooks?.afterFetch)
+					responseData = (await config.hooks.afterFetch(responseData)) ?? responseData
 
 				data.value = responseData
 				loading(false)
@@ -64,13 +59,11 @@ function useFetch<T>(url: string, config?: UseFetchConfig): UseFetchReturn<T> & 
 				const errorData = fetchError.message || fetchError.name
 
 				if (config?.hooks?.onFetchError)
-					await config.hooks.onFetchError({ error: fetchError, data })
+					await config.hooks.onFetchError(fetchError)
 
 				error.value = errorData
 
 				loading(false)
-
-				throw fetchError
 			})
 	}
 
