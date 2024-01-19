@@ -1,32 +1,32 @@
 {
-  "include": ["src", "*.ts"],
-  "exclude": ["src/**/__tests__/*", "node_modules"],
-  "compilerOptions": {
-    "lib": [
-      "ES2020",
-      "DOM",
-      "DOM.Iterable"
-    ],
-    "composite": true,
-    "noEmit": true,
-    "module": "ES2022",
-    "target": "ES2020",
-    "moduleResolution": "Node",
-    "verbatimModuleSyntax": true,
-    "resolveJsonModule": true,
-    "useDefineForClassFields": true,
-    "esModuleInterop": true,
-    "jsx": "preserve",
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "jsxImportSource": "vue",
-    "types": ["node", "jsdom"],
-    "baseUrl": ".",
-    "outDir": "./dist",
+	"compilerOptions": {
+		"composite": true,
+		"target": "ES2020",
+		"jsx": "preserve",
+		"jsxImportSource": "vue",
+		"lib": [
+			"ES2020",
+			"DOM",
+			"DOM.Iterable"
+		],
+		"useDefineForClassFields": true,
+		"baseUrl": ".",
+		"module": "ES2022",
+		"moduleResolution": "Node",
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+		"resolveJsonModule": true,
+		"types": ["node", "jsdom"],
+		"strict": true,
 		"noImplicitAny": false,
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-    "strict": true
-  }
+		"noEmit": true,
+		"outDir": "./dist",
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"verbatimModuleSyntax": true,
+		"skipLibCheck": true
+	},
+	"include": ["src", "*.ts"],
+	"exclude": ["src/**/__tests__/*", "node_modules"]
 }
