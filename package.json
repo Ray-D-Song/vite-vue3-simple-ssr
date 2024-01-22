@@ -23,9 +23,11 @@
 	},
 	"dependencies": {
 		"@types/koa": "^2.14.0",
+		"@types/koa-compress": "^4.0.6",
 		"@types/koa-static": "^4.0.4",
 		"@unocss/reset": "^0.58.3",
 		"koa": "^2.15.0",
+		"koa-compress": "^5.1.1",
 		"koa-connect": "^2.1.0",
 		"koa-static": "^5.0.0",
 		"msw": "^2.1.2",

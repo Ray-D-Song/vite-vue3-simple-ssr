@@ -5,6 +5,7 @@ import { type Manifest, createServer as createViteServer } from 'vite'
 import Koa from 'koa'
 import koaConnect from 'koa-connect'
 import koaStatic from 'koa-static'
+import koaCompress from 'koa-compress'
 
 const nodeEnv = process.env.NODE_ENV
 const __filename = fileURLToPath(import.meta.url)
@@ -20,6 +21,10 @@ async function createDevServer(): Promise<Server> {
 	})
 
 	const server = new Koa()
+
+	server.use(koaCompress({
+		threshold: 2048,
+	}))
 
 	server.use(koaConnect((req, res, next) => {
 		vite.middlewares.handle(req, res, next)
