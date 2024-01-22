@@ -46,7 +46,6 @@ async function serverRender(url: string, mainfest?: Manifest): Promise<{
 
 	try {
 		await router.push(url)
-		await router.push('/')
 		await router.isReady()
 
 		const ctx = {}
