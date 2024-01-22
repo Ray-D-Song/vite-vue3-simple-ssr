@@ -26,6 +26,7 @@
 		"@types/koa-compress": "^4.0.6",
 		"@types/koa-static": "^4.0.4",
 		"@unocss/reset": "^0.58.3",
+		"@vueuse/core": "^10.7.2",
 		"koa": "^2.15.0",
 		"koa-compress": "^5.1.1",
 		"koa-connect": "^2.1.0",
