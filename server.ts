@@ -1,5 +1,5 @@
 import fs from 'node:fs'
-import path from 'node:path'
+import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { type Manifest, createServer as createViteServer } from 'vite'
 import Koa from 'koa'
@@ -8,8 +8,9 @@ import koaStatic from 'koa-static'
 import koaCompress from 'koa-compress'
 
 const nodeEnv = process.env.NODE_ENV
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const _dirname = typeof __dirname !== 'undefined'
+	? __dirname
+	: dirname(fileURLToPath(import.meta.url))
 
 type Render = (url: string, manifest?: Manifest) => Promise<{ html: string, storeState: string, preload: string }>
 type Server = Koa<Koa.DefaultState, Koa.DefaultContext>
@@ -63,7 +64,7 @@ async function createDevServer(): Promise<Server> {
 async function createProdServer(): Promise<Server> {
 	const server = new Koa()
 
-	server.use(koaStatic(`${__dirname}/client`, {
+	server.use(koaStatic(`${_dirname}/client`, {
 		index: false,
 	}))
 
@@ -71,12 +72,12 @@ async function createProdServer(): Promise<Server> {
 		const url = request.url
 		try {
 			const template = fs.readFileSync(
-        `${__dirname}/client/index.html`,
+        `${_dirname}/client/index.html`,
         'utf-8',
 			)
 
-			const render: Render = (await import(`${__dirname}/server/serverEntry.js`)).serverRender
-			const manifest: Manifest = JSON.parse(fs.readFileSync(`${__dirname}/client/.vite/ssr-manifest.json`, 'utf-8'))
+			const render: Render = (await import(`${_dirname}/server/serverEntry.js`)).serverRender
+			const manifest: Manifest = JSON.parse(fs.readFileSync(`${_dirname}/client/.vite/ssr-manifest.json`, 'utf-8'))
 			const { html: appHtml, storeState, preload } = await render(url, manifest)
 
 			const html = template

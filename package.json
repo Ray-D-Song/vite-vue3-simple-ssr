@@ -1,6 +1,5 @@
 {
 	"name": "vite-vue3-simple-ssr",
-	"type": "module",
 	"version": "0.1.0",
 	"description": "simple ssr starter",
 	"author": "Ray-D-Song",
@@ -12,9 +11,9 @@
 		"vite"
 	],
 	"scripts": {
-		"dev": "NODE_ENV=development npx tsx server.ts",
-		"build:client": "vite build --ssrManifest",
-		"build:server": "npx swc ./server.ts -o ./dist/index.mjs && vite build --ssr src/serverEntry.ts --outDir dist/server",
+		"dev": "NODE_ENV=development VITE_CJS_IGNORE_WARNING=true node -r @swc-node/register --input-type=module server.ts",
+		"build:client": "VITE_CJS_IGNORE_WARNING=true vite build --ssrManifest",
+		"build:server": "VITE_CJS_IGNORE_WARNING=true npx swc ./server.ts -o ./dist/index.mjs && vite build --ssr src/serverEntry.ts --outDir dist/server",
 		"build": "npm run build:client && npm run build:server",
 		"preview": "npm run build && NODE_ENV=production SERVER_PORT=9292 node ./dist/index.mjs",
 		"test:unit": "vitest",
@@ -39,6 +38,7 @@
 	},
 	"devDependencies": {
 		"@antfu/eslint-config": "^2.6.3",
+		"@swc-node/register": "^1.6.8",
 		"@swc/cli": "^0.1.63",
 		"@swc/core": "^1.3.103",
 		"@tsconfig/node18": "^18.2.2",
