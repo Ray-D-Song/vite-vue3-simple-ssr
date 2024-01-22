@@ -23,10 +23,6 @@ async function createDevServer(): Promise<Server> {
 
 	const server = new Koa()
 
-	server.use(koaCompress({
-		threshold: 2048,
-	}))
-
 	server.use(koaConnect((req, res, next) => {
 		vite.middlewares.handle(req, res, next)
 	}))
@@ -63,6 +59,10 @@ async function createDevServer(): Promise<Server> {
 
 async function createProdServer(): Promise<Server> {
 	const server = new Koa()
+
+	server.use(koaCompress({
+		threshold: 2048,
+	}))
 
 	server.use(koaStatic(`${_dirname}/client`, {
 		index: false,
